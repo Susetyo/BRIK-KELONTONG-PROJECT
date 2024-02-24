@@ -1,10 +1,38 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
+import List from './pages/list';
+import Detail from './pages/detail/index';
+import ErrorPage from './commons/components/ErrorPage';
 import './index.css'
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import { Client as Styletron } from "styletron-engine-monolithic";
+import { Provider as StyletronProvider } from "styletron-react";
+import { LightTheme, BaseProvider } from "baseui";
+
+const engine = new Styletron();
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <List />,
+    errorElement: <ErrorPage />
+  },
+  {
+    path: "/detail/:id",
+    element: <Detail />,
+    errorElement: <ErrorPage />
+  },
+]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <StyletronProvider value={engine}>
+      <BaseProvider theme={LightTheme}>
+        <RouterProvider router={router} />
+      </BaseProvider>
+    </StyletronProvider>
   </React.StrictMode>,
 )
