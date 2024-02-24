@@ -1,11 +1,17 @@
-const { getItems, createItems, updateItems, getItemById, deleteItems } = require("../controllers/items");
+const { 
+  deleteItems, 
+  findAll,
+  findById,
+  create,
+  update
+} = require("../controllers/items");
 const express = require("express");
 const app = express();
 
-app.get("/items", getItems);
-app.get("/items/:id", getItemById);
-app.post("/items",createItems);
-app.put("/items/:id", updateItems);
+app.get("/items",findAll);
+app.get("/items/:id", findById);
+app.post("/items",create);
+app.put("/items/:id", update);
 app.delete("/items/:id", deleteItems);
 
 module.exports = app;
