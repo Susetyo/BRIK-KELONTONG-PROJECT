@@ -23,7 +23,7 @@ const findAll = (req, res) => {
 
   const { limit, offset } = getPagination(page, size);
 
-  Items.findAndCountAll({  where: condition, limit, offset })
+  Items.findAndCountAll({  where: condition, limit, offset, order: [[['id', 'DESC']]]})
     .then(data => {
       const response = getPagingData(data, page, limit);
       res.send(response);

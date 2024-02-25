@@ -13,6 +13,7 @@ import {Card, StyledBody} from 'baseui/card';
 import {
   LabelMedium
 } from 'baseui/typography';
+import {deleteItem} from '../../store/items/itemsSlice';
 
 const OVERRIDES = {
   Root: {style: {width: '100%', border:0}},
@@ -26,38 +27,44 @@ const OVERRIDES = {
 
 const Index = () => {
   const modalSelector = useSelector((state:RootState) => state.modal);
-  const {modalData, modalName}:{modalData:TItem, modalName:string} = modalSelector;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const {modalData, modalName}:{modalData:{item:TItem, items:any}, modalName:string} = modalSelector;
   const dispatch = useDispatch<AppDispatch>();
+  
   const onCancel = () => {
+    dispatch(closeModal())
+  }
+
+  const onDelete = () => {
+    dispatch(deleteItem({id:modalData?.item?.id, items:modalData?.items?.data}))
     dispatch(closeModal())
   }
 
   return (
     <Modal onClose={onCancel} isOpen={modalName === 'modalDetail'}>
-      {/* <ModalHeader></ModalHeader> */}
       <ModalBody className='!mt-8'>
         <Card
           overrides={OVERRIDES}
-          headerImage={modalData?.image}
-          title={modalData?.name}
+          headerImage={modalData?.item?.image}
+          title={modalData?.item?.name}
         >
           <StyledBody>
-            <LabelMedium>SKU: {modalData?.sku}</LabelMedium>
+            <LabelMedium>SKU: {modalData?.item?.sku}</LabelMedium>
             <LabelMedium className='mt-2'>Category: Test</LabelMedium>
-            <LabelMedium className='mt-2'>Description: {modalData?.description}</LabelMedium>
-            <LabelMedium className='mt-2'>Width: {modalData?.width}</LabelMedium>
-            <LabelMedium className='mt-2'>Length: {modalData?.length}</LabelMedium>
-            <LabelMedium className='mt-2'>Height: {modalData?.height}</LabelMedium>
-            <LabelMedium className='mt-2'>Price: {modalData?.harga}</LabelMedium>
+            <LabelMedium className='mt-2'>Description: {modalData?.item?.description}</LabelMedium>
+            <LabelMedium className='mt-2'>Width: {modalData?.item?.width}</LabelMedium>
+            <LabelMedium className='mt-2'>Length: {modalData?.item?.length}</LabelMedium>
+            <LabelMedium className='mt-2'>Height: {modalData?.item?.height}</LabelMedium>
+            <LabelMedium className='mt-2'>Price: {modalData?.item?.harga}</LabelMedium>
           </StyledBody>
         </Card>
-        <ModalFooter>
-          <ModalButton kind={ButtonKind.secondary}>
-            Delete
-          </ModalButton>
-          <ModalButton>Edit</ModalButton>
-        </ModalFooter>
       </ModalBody>
+      <ModalFooter>
+        <ModalButton onClick={onDelete} kind={ButtonKind.secondary}>
+          Delete
+        </ModalButton>
+        <ModalButton>Edit</ModalButton>
+      </ModalFooter>
     </Modal>
   )
 }
