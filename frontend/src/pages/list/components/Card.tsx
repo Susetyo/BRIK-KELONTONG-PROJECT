@@ -3,11 +3,19 @@ import {
   LabelMedium
 } from 'baseui/typography';
 import {Button, KIND, SIZE} from 'baseui/button';
-import {TCard} from '../types'
+import {TCard} from '../types';
+import { useDispatch } from 'react-redux';
+import { AppDispatch} from '../../../store/store';
+import {openModal} from '../../../store/modal/modalSlice';
 
 const Card = ({item}:TCard) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const onClick = () => {
+    dispatch(openModal({modalData:item, modalName: "modalDetail"}))
+  }
+
   return (
-    <div className="flex flex-wrap gap-5 border-2 border-solid border-[#E1E1E1] p-2 rounded-md cursor-pointer hover:bg-slate-100">
+    <div onClick={onClick} className="flex flex-wrap gap-5 border-2 border-solid border-[#E1E1E1] p-2 rounded-md cursor-pointer hover:bg-slate-100">
       <img width={56} height={56} src={item?.image} />
       <div className='border border-solid border-[#E1E1E1] border-l-0 border-t-0 border-b-0 pr-2'>
         <HeadingXSmall>Product Name</HeadingXSmall>
@@ -52,7 +60,7 @@ const Card = ({item}:TCard) => {
         </div>
       </div>
       <div className='border border-solid border-[#E1E1E1] border-l-0 border-t-0 border-b-0 pr-2'>
-        <HeadingXSmall>Harga</HeadingXSmall>
+        <HeadingXSmall>Price</HeadingXSmall>
         <div className="flex items-center mt-2">
           <LabelMedium>Rp. {item?.harga}</LabelMedium>
         </div>
