@@ -26,13 +26,15 @@ const Index = () => {
   const [search, setSearch] = useState('');
   const items = useSelector((state:RootState) => state.items);
   const modal = useSelector((state:RootState) => state.modal);
-  const user = useSelector((state:RootState) => state.user);
   const {modalName} = modal
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    if(user?.isSigned !== true) navigate('/login')
-  },[user,navigate])
+  // NOTES TODO: 
+  // For Checking if user referesh and state reset should be kick to login
+  // const user = useSelector((state:RootState) => state.user);
+  // useEffect(() => {
+  //   if(user?.isSigned !== true) navigate('/login')
+  // },[user,navigate])
 
   useEffect(() =>{
     dispatch(getItems({page}))
@@ -44,7 +46,10 @@ const Index = () => {
         <HeadingMedium>List Product</HeadingMedium>
         <Button
           overrides={OVERRIDE_BUTTON}
-          onClick={()=> dispatch(logOut())}
+          onClick={()=> {
+            dispatch(logOut())
+            navigate('/login')
+          }}
           kind={KIND.secondary} 
           size={SIZE.compact}>
             Logout
