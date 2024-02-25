@@ -109,7 +109,8 @@ const deleteItems = (req, res) => {
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Items was deleted successfully!"
+          message: "Items was deleted successfully!",
+          id
         });
       } else {
         res.send({

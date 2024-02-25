@@ -4,18 +4,30 @@ import {
 } from 'baseui/typography';
 import {Button, KIND, SIZE} from 'baseui/button';
 import {TCard} from '../types';
-import { useDispatch } from 'react-redux';
-import { AppDispatch} from '../../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState} from '../../../store/store';
 import {openModal} from '../../../store/modal/modalSlice';
+import {deleteItem} from '../../../store/items/itemsSlice';
+import { StatefulPopover } from "baseui/popover";
+import {
+  Overflow
+} from 'baseui/icon';
+import {Block} from 'baseui/block';
+
+
 
 const Card = ({item}:TCard) => {
+  const items = useSelector((state:RootState) => state.items);
   const dispatch = useDispatch<AppDispatch>();
   const onClick = () => {
     dispatch(openModal({modalData:item, modalName: "modalDetail"}))
   }
+  const onDelete = () => {
+    dispatch(deleteItem({id:item?.id, items:items?.data}))
+  }
 
   return (
-    <div onClick={onClick} className="flex flex-wrap gap-5 border-2 border-solid border-[#E1E1E1] p-2 rounded-md cursor-pointer hover:bg-slate-100">
+    <div className="flex flex-wrap gap-5 border-2 border-solid border-[#E1E1E1] p-2 rounded-md cursor-pointer hover:bg-slate-100 z-0">
       <img width={56} height={56} src={item?.image} />
       <div className='border border-solid border-[#E1E1E1] border-l-0 border-t-0 border-b-0 pr-2'>
         <HeadingXSmall>Product Name</HeadingXSmall>
@@ -65,13 +77,56 @@ const Card = ({item}:TCard) => {
           <LabelMedium>Rp. {item?.harga}</LabelMedium>
         </div>
       </div>
-      <div className='flex flex-col gap-2'>
-        <Button size={SIZE.mini}>
-          Edit
-        </Button>
-        <Button kind={KIND.secondary} size={SIZE.mini}>
-          Delete
-        </Button>
+      <div className='flex items-center justify-center'>
+        <StatefulPopover
+          content={() => (
+            <Block padding={"10px"}>
+              <Button
+                onClick={onClick}     
+                overrides={{
+                  BaseButton: {
+                    style: () => ({
+                      width: '100%'
+                    })
+                  }
+                }}
+                kind={KIND.secondary} 
+                size={SIZE.mini}>
+                  Detail
+              </Button>
+              <Button       
+                overrides={{
+                  BaseButton: {
+                    style: () => ({
+                      width: '100%'
+                    })
+                  }
+                }}
+                kind={KIND.secondary} 
+                size={SIZE.mini}>
+                  Edit
+              </Button>
+              <Button 
+                overrides={{
+                  BaseButton: {
+                    style: () => ({
+                      width: '100%',
+                      color: 'red'
+                    })
+                  }
+                }} 
+                onClick={onDelete} 
+                kind={KIND.secondary} 
+                size={SIZE.mini}>
+                Delete
+              </Button>
+            </Block>
+          )}
+          returnFocus
+          autoFocus
+        >
+          <Button size={SIZE.compact} kind={KIND.secondary}><Overflow /></Button>
+        </StatefulPopover>
       </div>
     </div>
   )
