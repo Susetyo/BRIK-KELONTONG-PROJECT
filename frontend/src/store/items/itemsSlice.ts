@@ -2,13 +2,12 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
-type ItemState = {
+type TItem = {
   data: any;
   isLoading: boolean;
 }
 
-const initialState: ItemState = {
+const initialState: TItem = {
   data: null,
   isLoading: false,
 };
@@ -24,7 +23,7 @@ const itemsSlice = createSlice({
       })
       .addCase(
         getItems.fulfilled,
-        (state, action:PayloadAction<ItemState>) => {
+        (state, action:PayloadAction<TItem>) => {
           state.data = action.payload
           state.isLoading = false
         }
@@ -37,7 +36,7 @@ const itemsSlice = createSlice({
       })
       .addCase(
         deleteItem.fulfilled,
-        (state, action:PayloadAction<ItemState>) => {
+        (state, action:PayloadAction<TItem>) => {
           state.data = action.payload
           state.isLoading = false
         }
@@ -50,7 +49,7 @@ const itemsSlice = createSlice({
       })
       .addCase(
         addItem.fulfilled,
-        (state, action:PayloadAction<ItemState>) => {
+        (state, action:PayloadAction<TItem>) => {
           state.data = action.payload
           state.isLoading = false
         }
@@ -63,8 +62,8 @@ const itemsSlice = createSlice({
 
 export const getItems = createAsyncThunk(
   "items/getItems",
-  async () => {
-    const response = await axios.get('http://localhost:3000/items?size=100');
+  async ({page}:{page:number}) => {
+    const response = await axios.get(`http://localhost:3000/items?page=${page}&size=20`);
     const {data} = response;
     return data;
   }
@@ -90,39 +89,10 @@ export const addItem = createAsyncThunk(
     sendData,
     items
   }:any) => {
-    const {
-      sku,
-      name, 
-      description,
-      weight, 
-      width, 
-      length, 
-      height, 
-      image, 
-      harga,
-      category_id
-    } = sendData;
-
-    const response = await axios.post('http://localhost:3000/items',{
-      sku,
-      name, 
-      description,
-      weight, 
-      width, 
-      length, 
-      height, 
-      image, 
-      harga,
-      category_id
-    });
-
+    const response = await axios.post('http://localhost:3000/items',sendData);
     const {data} = response;
     const newItems = items?.items.push(data);
-    const result = {
-      ...items,
-      items:newItems
-    }
-
+    const result = { ...items, items:newItems}
     return result;
   }
 );

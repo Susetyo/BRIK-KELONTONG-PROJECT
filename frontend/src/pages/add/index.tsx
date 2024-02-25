@@ -16,17 +16,41 @@ import {addItem} from '../../store/items/itemsSlice';
 import { Textarea } from "baseui/textarea";
 import { useFormik } from 'formik';
 import { useNavigate } from "react-router-dom";
+import {getCategories} from "../../store/categories/categoriesSlice";
+import { useEffect, useState, useMemo } from 'react';
+import { Select } from "baseui/select"; 
+
+type TModalSelector = {   
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  modalData: { item:TItem, items:any }, 
+  modalName:string
+}
+
+export type TCategory = {
+  id: number, 
+  categoryName: string, 
+}
 
 const Index = () => {
-  const modalSelector = useSelector((state:RootState) => state.modal);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const {modalName, modalData}:{modalData:{item:TItem, items:any}, modalName:string} = modalSelector;
+  const [categoryId, setCategoryId] = useState<any>([]);
+  const modalSelector = useSelector((state:RootState) => state.modal);
+  const {modalName, modalData}:TModalSelector = modalSelector;
+  const categorySelector = useSelector((state:RootState) => state.categories);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const onCancel = () => {
     dispatch(closeModal())
   }
+
+  const options = useMemo(() => {
+    return categorySelector?.data?.map((category:TCategory) => ({id:category?.id, label:category?.categoryName}))
+  },[categorySelector]);
+
+  useEffect(() =>{
+    dispatch(getCategories());
+  },[dispatch]);
 
   const formik = useFormik({
     initialValues: {
@@ -38,13 +62,14 @@ const Index = () => {
       length: 0, 
       height: 0, 
       image: "", 
-      harga:0,
-      category_id: 1
+      price:0
     },
     onSubmit: values => {
-      dispatch(addItem({sendData:values,items:modalData}))
-      dispatch(closeModal())
-      navigate(0)
+      if(categoryId.length > 0){
+        dispatch(addItem({sendData:{...values, categoryId:categoryId[0]?.id},items:modalData}))
+        dispatch(closeModal())
+        navigate(0)
+      }
     },
   });
 
@@ -78,12 +103,12 @@ const Index = () => {
           <FormControl
             label={() => "Category"}
           >
-            <Input 
-              id="category_id"
-              name="category_id"
-              type="number"
-              onChange={formik.handleChange}
-              value={formik.values.category_id}
+            <Select
+              id="categoryId"
+              options={options}
+              value={categoryId}
+              placeholder="Select category"
+              onChange={params => setCategoryId(params?.value)}
             />
           </FormControl>
           <FormControl
@@ -161,11 +186,11 @@ const Index = () => {
           >
             <Input
               min={0}
-              id="harga"
-              name="harga"
+              id="price"
+              name="price"
               type="number"
               onChange={formik.handleChange}
-              value={formik.values.harga}                                                    
+              value={formik.values.price}                                                    
             />
           </FormControl>
         </ModalBody>

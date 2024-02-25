@@ -1,5 +1,6 @@
 const itemsRoutes = require("./routes/item");
-const categoryRoutes = require("./routes/category")
+const categoryRoutes = require("./routes/category");
+const userRoutes = require('./routes/user');
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const express = require("express");
@@ -22,6 +23,7 @@ db.sequelize.sync()
 
 app.use(itemsRoutes);
 app.use(categoryRoutes);
+app.use(userRoutes);
 
 app.listen(process.env.NODE_PORT, () => {
   console.log(`Server listening on port ${process.env.NODE_PORT}`);

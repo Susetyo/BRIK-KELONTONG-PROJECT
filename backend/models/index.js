@@ -14,7 +14,8 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.item = require("./item.model.js")(sequelize, Sequelize);
-db.category = require("./category.model.js")(sequelize, Sequelize);
+db.item = require("./item.js")(sequelize, Sequelize);
+db.category = require("./category.js")(sequelize, Sequelize);
+db.user = require('./user.js')(sequelize, Sequelize);
 
 module.exports = db;

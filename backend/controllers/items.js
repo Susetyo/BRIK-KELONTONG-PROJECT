@@ -45,9 +45,9 @@ const create = (req, res) => {
     width:req.body.width, 
     length:req.body.length, 
     height:req.body.height, 
-    image:req.body.image, 
-    harga:req.body.harga, 
-    category_id:req.body.category_id
+    image_url:req.body.image, 
+    price:req.body.price, 
+    categoryId:req.body.categoryId
   };
 
   Items.create(items)

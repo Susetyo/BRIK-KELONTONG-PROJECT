@@ -45,7 +45,7 @@ const Index = () => {
       <ModalBody className='!mt-8'>
         <Card
           overrides={OVERRIDES}
-          headerImage={modalData?.item?.image}
+          headerImage={modalData?.item?.image_url}
           title={modalData?.item?.name}
         >
           <StyledBody>
@@ -55,7 +55,7 @@ const Index = () => {
             <LabelMedium className='mt-2'>Width: {modalData?.item?.width}</LabelMedium>
             <LabelMedium className='mt-2'>Length: {modalData?.item?.length}</LabelMedium>
             <LabelMedium className='mt-2'>Height: {modalData?.item?.height}</LabelMedium>
-            <LabelMedium className='mt-2'>Price: {modalData?.item?.harga}</LabelMedium>
+            <LabelMedium className='mt-2'>Price: Rp. {modalData?.item?.price}</LabelMedium>
           </StyledBody>
         </Card>
       </ModalBody>

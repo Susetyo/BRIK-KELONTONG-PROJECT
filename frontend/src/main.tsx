@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import List from './pages/list';
-import Detail from './pages/detail/index';
+import Login from './pages/login'
+import Register from './pages/register';
 import ErrorPage from './commons/components/ErrorPage';
 import './index.css'
 import {
@@ -14,7 +15,6 @@ import { LightTheme, BaseProvider } from "baseui";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
 
-
 const engine = new Styletron();
 
 const router = createBrowserRouter([
@@ -24,8 +24,13 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />
   },
   {
-    path: "/detail/:id",
-    element: <Detail />,
+    path: "/login",
+    element: <Login />,
+    errorElement: <ErrorPage />
+  },
+  {
+    path: "/register",
+    element: <Register />,
     errorElement: <ErrorPage />
   },
 ]);
