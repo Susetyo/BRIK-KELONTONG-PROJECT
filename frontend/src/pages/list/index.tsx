@@ -24,10 +24,10 @@ function Index() {
         height:calculatedHeight
       }}>
         {items?.data && items?.data?.items?.map((item:TItem) =>(
-          <>
+          <div key={item.id}>
             <Card item={item} />
             <div className='my-2' />
-          </>
+          </div>
         ))}
       </div>
       <div className='w-full flex justify-center'>
