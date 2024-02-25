@@ -45,13 +45,26 @@ const itemsSlice = createSlice({
       .addCase(deleteItem.rejected, (state) => {
         state.isLoading = true;
       })
+      .addCase(addItem.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        addItem.fulfilled,
+        (state, action:PayloadAction<ItemState>) => {
+          state.data = action.payload
+          state.isLoading = false
+        }
+      )
+      .addCase(addItem.rejected, (state) => {
+        state.isLoading = true;
+      })
   },
 });
 
 export const getItems = createAsyncThunk(
   "items/getItems",
   async () => {
-    const response = await axios.get('http://localhost:3000/items');
+    const response = await axios.get('http://localhost:3000/items?size=100');
     const {data} = response;
     return data;
   }
@@ -67,6 +80,49 @@ export const deleteItem = createAsyncThunk(
       ...items,
       items:newItems
     }
+    return result;
+  }
+);
+
+export const addItem = createAsyncThunk(
+  "items/addItem",
+  async ({
+    sendData,
+    items
+  }:any) => {
+    const {
+      sku,
+      name, 
+      description,
+      weight, 
+      width, 
+      length, 
+      height, 
+      image, 
+      harga,
+      category_id
+    } = sendData;
+
+    const response = await axios.post('http://localhost:3000/items',{
+      sku,
+      name, 
+      description,
+      weight, 
+      width, 
+      length, 
+      height, 
+      image, 
+      harga,
+      category_id
+    });
+
+    const {data} = response;
+    const newItems = items?.items.push(data);
+    const result = {
+      ...items,
+      items:newItems
+    }
+
     return result;
   }
 );
