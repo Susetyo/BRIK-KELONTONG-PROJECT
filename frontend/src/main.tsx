@@ -11,6 +11,9 @@ import {
 import { Client as Styletron } from "styletron-engine-monolithic";
 import { Provider as StyletronProvider } from "styletron-react";
 import { LightTheme, BaseProvider } from "baseui";
+import { Provider } from "react-redux";
+import { store } from "./store/store.ts";
+
 
 const engine = new Styletron();
 
@@ -31,7 +34,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <StyletronProvider value={engine}>
       <BaseProvider theme={LightTheme}>
-        <RouterProvider router={router} />
+        <Provider store={store}>
+          <RouterProvider router={router} />
+        </Provider>
       </BaseProvider>
     </StyletronProvider>
   </React.StrictMode>,
