@@ -3,8 +3,8 @@ const Category = db.category;
 const Op = db.Sequelize.Op;
 
 const findAll = (req, res) => {
-  const category_name = req.query.category_name;
-  let condition = category_name ? { category_name: { [Op.iLike]: `%${title}%` } } : null;
+  const categoryName = req.query.categoryName;
+  let condition = categoryName ? { categoryName: { [Op.iLike]: `%${title}%` } } : null;
 
   Category.findAll({ where: condition })
     .then(data => {
@@ -20,7 +20,7 @@ const findAll = (req, res) => {
 
 const create = (req, res) => {
   const category = {
-    category_name: req.body.category_name,
+    categoryName: req.body.categoryName,
   };
 
   Category.create(category)

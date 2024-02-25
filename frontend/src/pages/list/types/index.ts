@@ -7,9 +7,10 @@ export type TItem = {
   width: number,
   length: number,
   height: number,
-  image: string,
-  harga: number,
-  category_id: number,
+  image_url: string,
+  price: number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  categoryId: any,
   createdAt: string,
   updatedAt: string
 }
