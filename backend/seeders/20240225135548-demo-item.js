@@ -18,7 +18,15 @@ module.exports = {
       password: 'jd',
       createdAt: new Date(),
       updatedAt: new Date()
-    }]);
+    },
+    {
+      fullName: 'Admin',
+      userName: 'admin',
+      password: 'admin',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+    ]);
   },
 
   async down (queryInterface, Sequelize) {

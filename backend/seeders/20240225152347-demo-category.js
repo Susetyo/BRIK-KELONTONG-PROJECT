@@ -13,16 +13,19 @@ module.exports = {
      * }], {});
     */
     return queryInterface.bulkInsert('Categories', [{
+      id:1,
       categoryName: 'Makanan Utama',
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
+      id:2,
       categoryName: 'Minuman',
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
+      id:3,
       categoryName: 'Roti',
       createdAt: new Date(),
       updatedAt: new Date()
