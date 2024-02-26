@@ -2,13 +2,13 @@ import {
   HeadingXSmall,
   LabelMedium
 } from 'baseui/typography';
-import {TCard} from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState} from '../../../store/store';
 import {openModal} from '../../../store/modal/modalSlice';
 import {TCategory} from '../../add';
 import {useEffect} from 'react';
 import {getCategories} from "../../../store/categories/categoriesSlice";
+import { TCard } from '../../../commons/types';
 
 
 const Card = ({item}:TCard) => {

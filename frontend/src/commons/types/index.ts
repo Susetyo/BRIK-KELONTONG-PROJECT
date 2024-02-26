@@ -15,6 +15,13 @@ export type TItem = {
   updatedAt: string
 }
 
+export type TResponseItems = {
+  totalItems: number,
+  items : TItem[],
+  totalPages: number,
+  currentPage: number
+}
+
 export type TCard ={
   item: TItem
 }
