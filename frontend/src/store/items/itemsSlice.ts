@@ -91,4 +91,14 @@ export const addItem = createAsyncThunk("items/addItem",
   }
 );
 
+export const editItem = createAsyncThunk("items/editItem",
+  async ({ sendData, items}:any) => {
+    const response = await axios.put(`${Config.baseUrl}/items/${sendData?.id}`,sendData);
+    const {data} = response;
+    const newItems = items?.items.push(data);
+    const result = { ...items, items:newItems}
+    return result;
+  }
+);
+
 export default itemsSlice.reducer;
