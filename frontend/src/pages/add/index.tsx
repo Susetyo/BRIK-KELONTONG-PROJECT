@@ -9,7 +9,7 @@ import { KIND as ButtonKind } from "baseui/button";
 import {RootState, AppDispatch} from '../../store/store';
 import { useSelector, useDispatch } from 'react-redux';
 import {closeModal} from '../../store/modal/modalSlice';
-import { TItem } from '../list/types';
+import { TItem } from '../../commons/types';
 import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
 import {addItem} from '../../store/items/itemsSlice';
@@ -18,7 +18,8 @@ import { useFormik } from 'formik';
 import { useNavigate } from "react-router-dom";
 import {getCategories} from "../../store/categories/categoriesSlice";
 import { useEffect, useState, useMemo } from 'react';
-import { Select } from "baseui/select"; 
+import { Select } from "baseui/select";
+import * as Yup from 'yup';
 
 type TModalSelector = {   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,9 +62,20 @@ const Index = () => {
       width: 0, 
       length: 0, 
       height: 0, 
-      image: "", 
+      image_url: "", 
       price:0
     },
+    validationSchema:Yup.object({
+      sku: Yup.string().required('Sku is a required field'),
+      name: Yup.string().required('Name is a required field'),
+      description: Yup.string().required('Description is a required field'),
+      weight: Yup.number().min(1).required('Weight is a required field'),
+      width: Yup.number().min(1).required('Width is a required field'),
+      length: Yup.number().min(1).required('Length is a required field'),
+      height: Yup.number().min(1).required('Height is a required field'),
+      image_url: Yup.string().required('Image is a required field'),
+      price: Yup.number().min(1).required('Price is a required field')
+    }),
     onSubmit: values => {
       if(categoryId.length > 0){
         dispatch(addItem({sendData:{...values, categoryId:categoryId[0]?.id},items:modalData}))
@@ -78,9 +90,7 @@ const Index = () => {
       <ModalHeader>Add Item</ModalHeader>
       <form onSubmit={formik.handleSubmit}>
         <ModalBody>
-          <FormControl
-            label={() => "Product Name"}
-          >
+          <FormControl label="Product Name" error={formik.errors.name}>
             <Input 
               id="name"
               name="name"
@@ -89,9 +99,7 @@ const Index = () => {
               value={formik.values.name}
             />
           </FormControl>
-          <FormControl
-            label={() => "SKU"}
-          >
+          <FormControl label="SKU" error={formik.errors.sku}>
             <Input 
               id="sku"
               name="sku"
@@ -100,9 +108,7 @@ const Index = () => {
               value={formik.values.sku}
             />
           </FormControl>
-          <FormControl
-            label={() => "Category"}
-          >
+          <FormControl label="Category">
             <Select
               id="categoryId"
               options={options}
@@ -111,9 +117,7 @@ const Index = () => {
               onChange={params => setCategoryId(params?.value)}
             />
           </FormControl>
-          <FormControl
-            label={() => "Description"}
-          >
+          <FormControl label="Description" error={formik.errors.description}>
             <Textarea 
               id="description"
               name="description"
@@ -122,9 +126,7 @@ const Index = () => {
               value={formik.values.description}
             />
           </FormControl>
-          <FormControl
-            label={() => "Weight"}
-          >
+          <FormControl label="Weight" error={formik.errors.weight}>
             <Input 
               min={0}
               id="weight"
@@ -134,9 +136,7 @@ const Index = () => {
               value={formik.values.weight}
             />
           </FormControl>
-          <FormControl
-            label={() => "Width"}
-          >
+          <FormControl label="Width" error={formik.errors.width}>
             <Input 
               min={0}
               id="width"
@@ -146,9 +146,7 @@ const Index = () => {
               value={formik.values.width}
             />
           </FormControl>
-          <FormControl
-            label={() => "Height"}
-          >
+          <FormControl label="Height" error={formik.errors.height}>
             <Input 
               min={0}
               id="height"
@@ -158,9 +156,7 @@ const Index = () => {
               value={formik.values.height}              
             />
           </FormControl>
-          <FormControl
-            label={() => "Length"}
-          >
+          <FormControl label="Length" error={formik.errors.length}>
             <Input
               min={0}
               id="length"
@@ -170,20 +166,16 @@ const Index = () => {
               value={formik.values.length}                            
             />
           </FormControl>
-          <FormControl
-            label={() => "Image URl"}
-          >
+          <FormControl label="Image URl" error={formik.errors.image_url}>
             <Input 
-              id="image"
-              name="image"
+              id="image_url"
+              name="image_url"
               type="text"
               onChange={formik.handleChange}
-              value={formik.values.image}                                          
+              value={formik.values.image_url}                                          
             />
           </FormControl>
-          <FormControl
-            label={() => "Price"}
-          >
+          <FormControl label="Price" error={formik.errors.price}>
             <Input
               min={0}
               id="price"

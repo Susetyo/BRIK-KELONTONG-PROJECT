@@ -45,7 +45,7 @@ const create = (req, res) => {
     width:req.body.width, 
     length:req.body.length, 
     height:req.body.height, 
-    image_url:req.body.image, 
+    image_url:req.body.image_url, 
     price:req.body.price, 
     categoryId:req.body.categoryId
   };
