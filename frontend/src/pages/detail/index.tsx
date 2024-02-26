@@ -7,28 +7,18 @@ import {
 import { KIND as ButtonKind } from "baseui/button";
 import {RootState, AppDispatch} from '../../store/store';
 import { useSelector, useDispatch } from 'react-redux';
-import {closeModal} from '../../store/modal/modalSlice';
-import { TItem } from '../list/types';
+import {closeModal, openModal} from '../../store/modal/modalSlice';
 import {Card, StyledBody} from 'baseui/card';
 import {
   LabelMedium
 } from 'baseui/typography';
 import {deleteItem} from '../../store/items/itemsSlice';
+import {OVERRIDES, TModalSelector} from './types'
 
-const OVERRIDES = {
-  Root: {style: {width: '100%', border:0}},
-  HeaderImage: {
-    style: () => ({
-     height: '400px',
-     width: '100%'
-    })
-  }
-}
 
 const Index = () => {
   const modalSelector = useSelector((state:RootState) => state.modal);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const {modalData, modalName}:{modalData:{item:TItem, items:any}, modalName:string} = modalSelector;
+  const {modalData, modalName}:TModalSelector = modalSelector;
   const dispatch = useDispatch<AppDispatch>();
   
   const onCancel = () => {
@@ -38,6 +28,11 @@ const Index = () => {
   const onDelete = () => {
     dispatch(deleteItem({id:modalData?.item?.id, items:modalData?.items?.data}))
     dispatch(closeModal())
+  }
+
+  const onEdit = () => {
+    dispatch(closeModal())
+    dispatch(openModal({modalName: 'modalAdd', modalData: { item: modalData?.item, isEdit: true }}))
   }
 
   return (
@@ -63,7 +58,7 @@ const Index = () => {
         <ModalButton onClick={onDelete} kind={ButtonKind.secondary}>
           Delete
         </ModalButton>
-        <ModalButton>Edit</ModalButton>
+        <ModalButton onClick={onEdit}>Edit</ModalButton>
       </ModalFooter>
     </Modal>
   )

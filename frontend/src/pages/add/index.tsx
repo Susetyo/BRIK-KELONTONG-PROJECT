@@ -12,7 +12,7 @@ import {closeModal} from '../../store/modal/modalSlice';
 import { TItem } from '../../commons/types';
 import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
-import {addItem} from '../../store/items/itemsSlice';
+import { addItem, editItem } from '../../store/items/itemsSlice';
 import { Textarea } from "baseui/textarea";
 import { useFormik } from 'formik';
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ import * as Yup from 'yup';
 
 type TModalSelector = {   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  modalData: { item:TItem, items:any }, 
+  modalData: { item:TItem, items:any, isEdit: boolean }, 
   modalName:string
 }
 
@@ -35,11 +35,24 @@ export type TCategory = {
 const Index = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [categoryId, setCategoryId] = useState<any>([]);
+  const [categoryError, setCategoryError] = useState<any>(''); 
   const modalSelector = useSelector((state:RootState) => state.modal);
   const {modalName, modalData}:TModalSelector = modalSelector;
   const categorySelector = useSelector((state:RootState) => state.categories);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const title = modalData?.isEdit ? 'Edit Item' : 'Add Item';
+  const initialValues = {
+    sku: modalData?.isEdit ? modalData?.item?.sku : "",
+    name: modalData?.isEdit ? modalData?.item?.name : "", 
+    description: modalData?.isEdit ? modalData?.item?.description : "",
+    weight: modalData?.isEdit ? modalData?.item?.weight : "", 
+    width: modalData?.isEdit ? modalData?.item?.width : "",
+    length: modalData?.isEdit ? modalData?.item?.length : "",
+    height: modalData?.isEdit ? modalData?.item?.height : "",
+    image_url: modalData?.isEdit ? modalData?.item?.image_url : "",
+    price: modalData?.isEdit ? modalData?.item?.price : "",
+  }
 
   const onCancel = () => {
     dispatch(closeModal())
@@ -49,22 +62,8 @@ const Index = () => {
     return categorySelector?.data?.map((category:TCategory) => ({id:category?.id, label:category?.categoryName}))
   },[categorySelector]);
 
-  useEffect(() =>{
-    dispatch(getCategories());
-  },[dispatch]);
-
   const formik = useFormik({
-    initialValues: {
-      sku: "",
-      name:"", 
-      description:"",
-      weight: 0, 
-      width: 0, 
-      length: 0, 
-      height: 0, 
-      image_url: "", 
-      price:0
-    },
+    initialValues: initialValues,
     validationSchema:Yup.object({
       sku: Yup.string().required('Sku is a required field'),
       name: Yup.string().required('Name is a required field'),
@@ -78,16 +77,27 @@ const Index = () => {
     }),
     onSubmit: values => {
       if(categoryId.length > 0){
-        dispatch(addItem({sendData:{...values, categoryId:categoryId[0]?.id},items:modalData}))
+        if(modalData?.isEdit){
+          dispatch(editItem({sendData:{...values, categoryId:categoryId[0]?.id, id:modalData?.item?.id},items:modalData}))
+        }else{
+          dispatch(addItem({sendData:{...values, categoryId:categoryId[0]?.id},items:modalData}))
+        }
+
         dispatch(closeModal())
         navigate(0)
+      }else{
+        setCategoryError('Please choose category first.')
       }
     },
   });
 
+  useEffect(() =>{
+    dispatch(getCategories());
+  },[dispatch]);
+
   return (
     <Modal onClose={onCancel} isOpen={modalName === 'modalAdd'}>
-      <ModalHeader>Add Item</ModalHeader>
+      <ModalHeader>{title}</ModalHeader>
       <form onSubmit={formik.handleSubmit}>
         <ModalBody>
           <FormControl label="Product Name" error={formik.errors.name}>
@@ -108,13 +118,16 @@ const Index = () => {
               value={formik.values.sku}
             />
           </FormControl>
-          <FormControl label="Category">
+          <FormControl label="Category" error={categoryError}>
             <Select
               id="categoryId"
               options={options}
               value={categoryId}
               placeholder="Select category"
-              onChange={params => setCategoryId(params?.value)}
+              onChange={params => {
+                setCategoryId(params?.value)
+                setCategoryError("");
+              }}
             />
           </FormControl>
           <FormControl label="Description" error={formik.errors.description}>

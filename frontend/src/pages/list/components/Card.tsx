@@ -22,7 +22,7 @@ const Card = ({item}:TCard) => {
   },[dispatch]);
 
   const onClick = () => {
-    dispatch(openModal({modalData:{item:item, items:items}, modalName: "modalDetail"}))
+    dispatch(openModal({modalData:{item:item, items:items, isEdit: false}, modalName: "modalDetail"}))
   }
 
   return (
