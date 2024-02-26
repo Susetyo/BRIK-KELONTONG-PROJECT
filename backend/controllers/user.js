@@ -18,8 +18,7 @@ const create = (req, res) => {
 };
 
 const checkLogin = (req, res) => {
-  const {userName, password} = req.query;
-
+  const {userName, password} = req.body;
   User.findOne({
     where:{
       userName:{ [Op.eq]: userName },
@@ -27,6 +26,7 @@ const checkLogin = (req, res) => {
     }
   })
     .then(data => {
+      if(!data) throw('Account not found !!!.')
       res.send(data);
     })
     .catch(err => {
