@@ -27,7 +27,7 @@ const Card = ({item}:TCard) => {
 
   return (
     <div onClick={onClick} className="flex flex-wrap gap-5 border-2 border-solid border-[#E1E1E1] p-2 rounded-md cursor-pointer hover:bg-slate-100 z-0">
-      <img width={56} height={56} src={item?.image_url} />
+      <img className='object-cover' width={56} height={56} src={item?.image_url} />
       <div className='border border-solid border-[#E1E1E1] border-l-0 border-t-0 border-b-0 pr-2'>
         <HeadingXSmall>Product Name</HeadingXSmall>
         <div className="flex flex-col justify-center mt-2">
