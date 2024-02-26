@@ -1,5 +1,38 @@
 ## Installation
 
+Configuration Backend
+
+```sh
+cd backend
+cd config
+if config.json not exist create one with format config.json
+paste this value:
+{
+  "development": {
+    "username": "postgres", <---- please edit with  your username db
+    "password": "root",  <---- please edit with your password db
+    "database": "brik_toko_kelontong", <---- please edit with your db name
+    "host": "127.0.0.1", <---- please edit with your host 
+    "dialect": "postgresql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "postgresql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "postgresql"
+  }
+}
+```
+
+
 Backend folder
 
 ```sh
@@ -23,18 +56,18 @@ npm run dev
 Create .env file inside backend folder
 
 ```sh
-PG_USER=postgres //adjust it to your local env
-PG_HOST=localhost //adjust it to your local env
-PG_DATABASE=brik_toko_kelontong //adjust it to your local env
-PG_PASSWORD=root //adjust it to your local env
-PG_PORT=5432 //adjust it to your local env
-NODE_PORT=3000 //adjust it to your local env
+PG_USER=postgres  <---- please edit with your username db
+PG_HOST=localhost <---- please edit with your host db
+PG_DATABASE=brik_toko_kelontong <---- please edit with your db name
+PG_PASSWORD=root <---- please edit with your password db
+PG_PORT=5432 <---- please edit with your port db
+NODE_PORT=3000 
 ```
 
 Create .env file inside frontend folder
 
 ```sh
-VITE_BASE_URL=http://localhost:3000 //adjust it to your local env
+VITE_BASE_URL=http://localhost:3000
 ```
 
 ## User Login
