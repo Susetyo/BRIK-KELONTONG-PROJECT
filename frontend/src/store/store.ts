@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore  } from "@reduxjs/toolkit";
 import itemsReducer from './items/itemsSlice';
 import modalSlice from "./modal/modalSlice";
 import loginSlice from "./login/loginSlice";
@@ -10,7 +10,11 @@ export const store = configureStore({
     modal: modalSlice,
     user: loginSlice,
     categories: categoriesSlice
-  }
+  },
+  middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware({
+    serializableCheck: false,
+  }),
 })
 
 export type RootState = ReturnType<typeof store.getState>;

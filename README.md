@@ -31,6 +31,11 @@ PG_PORT=5432 //adjust it to your local env
 NODE_PORT=3000 //adjust it to your local env
 ```
 
+Create .env file inside frontend folder
+
+```sh
+VITE_BASE_URL=http://localhost:3000 //adjust it to your local env
+```
 
 ## User Login
 ```sh

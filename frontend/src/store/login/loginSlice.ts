@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { Config } from "../../config/config";
 
 type TLoginState = {
-  isSigned: boolean;
   isLoading: boolean;
+  error: string | null
 }
 
 const initialState: TLoginState = {
-  isSigned: false,
   isLoading: false,
+  error: null
 };
 
 const loginSlice = createSlice({
@@ -18,32 +19,33 @@ const loginSlice = createSlice({
   reducers: {
     logOut:(state) =>{
       state.isLoading = false;
-      state.isSigned = false;
+      state.error = null;
+      localStorage.removeItem('user')
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state) => {
+      .addCase(loginUser.fulfilled, (state, action) => {
+        localStorage.setItem('user', JSON.stringify(action.payload.data))
         state.isLoading = false;
-        state.isSigned = true;
+        state.error = null;
       })
       .addCase(loginUser.rejected, (state) => {
         state.isLoading = false;
-        state.isSigned = false;
+        state.error = 'Wrong user name and password !';
       })
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(registerUser.fulfilled, (state) => {
         state.isLoading = false;
-        state.isSigned = true;
       })
       .addCase(registerUser.rejected, (state) => {
         state.isLoading = false;
-        state.isSigned = false;
       })
   },
 });
@@ -52,12 +54,8 @@ export const loginUser = createAsyncThunk('login/loginUser',async({
   userName,
   password
 }:any)=>{
-  try{
-    const response = await axios.get(`http://localhost:3000/checkLogin?userName=${userName}&password=${password}`);
-    return response
-  }catch(err){
-    console.log(err)
-  }
+  const response = await axios.post(`${Config.baseUrl}/checkLogin`,{userName, password});
+  return response
 })
 
 export const registerUser = createAsyncThunk('login/registerUser',async({
@@ -65,16 +63,12 @@ export const registerUser = createAsyncThunk('login/registerUser',async({
   password,
   fullName
 }:any)=>{
-  try{
-    const response = await axios.post('http://localhost:3000/user',{
-      userName,
-      password,
-      fullName
-    });
-    return response
-  }catch(err){
-    console.log(err)
-  }
+  const response = await axios.post(`${Config.baseUrl}/user`,{
+    userName,
+    password,
+    fullName
+  });
+  return response
 })
 
 export const { logOut } = loginSlice.actions

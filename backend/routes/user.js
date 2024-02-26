@@ -3,6 +3,6 @@ const express = require("express");
 const app = express();
 
 app.post("/user", create);
-app.get("/checkLogin", checkLogin);
+app.post("/checkLogin", checkLogin);
 
 module.exports = app;
