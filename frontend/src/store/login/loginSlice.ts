@@ -41,7 +41,8 @@ const loginSlice = createSlice({
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(registerUser.fulfilled, (state,action) => {
+        localStorage.setItem('user', JSON.stringify(action.payload.data))
         state.isLoading = false;
       })
       .addCase(registerUser.rejected, (state) => {
